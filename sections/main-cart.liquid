@@ -1,0 +1,75 @@
+{{ 'main-cart.css' | asset_url | stylesheet_tag }}
+
+<section class="cart">
+  <div class="container">
+    {% form 'cart', cart %}
+      <div class="d-flex justify-content-between align-items-center cart-title">
+        <h2 class="h1">Your cart</h2>
+        <a href="{{ routes.all_products_collection_url }}" class="h3 cart-link">Continue shopping</a>
+      </div>
+      {% if cart.empty? %}
+        <p>You cart is empty</p>
+      {% else %}
+        <div class="cart-product__heading d-grid mt-40">
+          <h4 class="h5 text-uppercase">product</h4>
+          <h4 class="heading-quantity h5 text-uppercase">quantity</h4>
+          <h4 class="h5 text-uppercase">total</h4>
+        </div>
+        {% for item in cart.items %}
+          <div class="cart-product d-grid">
+            <div class="cart-product__content d-flex ">
+              <img src="{{item.image | image_url}}" alt="">
+              <div class="cart__content-text d-flex justify-content-between w-100">
+                <div class="cart-text__name">
+                  <h3 class="h3 fw-400">{{ item.title | split: " - " | first }}</h3>
+                  {%- assign color = item.title | split: '-' -%}
+                  <h3 class="h4 fw-400 cart__content-variable">Color: {{ color[1] }}</h3>
+                </div>
+                <div class="cart-text__quantity d-flex align-items-center">
+                  {% render 'quantity-button', value: {{item.quantity}}, name: 'updates[]' %}
+                  <a href="{{item.url_to_remove}}" class="pl-14">{% render 'icon-delete' %}</a>
+                </div>
+              </div>
+            </div>
+            <p class="cart-product__price">{{ item.final_line_price | money }}
+            </p>
+
+          </div>
+
+        {% endfor %}
+        <div class="cart-product__total text-center pt-24">
+          <p class="h3">Subtotal {{ cart.total_price | money_with_currency }}</p>
+          <p class="h5 mt-16">Taxes and shipping calculated at checkout</p>
+          <button
+            type="submit"
+            value="Update cart"
+            class="mt-16 button cart__total-button cursor-pointer">
+            Update cart</button>
+          <button
+            type="submit"
+            name="checkout"
+            class="mt-16 button black cart__total-button cursor-pointer">
+            Checkout</button>
+        </div>
+
+      {% endif %}
+    {% endform %}
+
+  </div>
+
+</section>
+{% schema %}
+  {
+    "name": "Main-cart",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "collection"
+      }
+    ]
+  }
+{% endschema %}

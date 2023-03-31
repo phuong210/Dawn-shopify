@@ -1,0 +1,23 @@
+{{ 'form-search.css' | asset_url | stylesheet_tag }}
+
+<div class="{{ class }}" id="form-search">
+  <div class="form-search__content d-flex justify-content-center align-items-center">
+    <form action="{{ routes.search_url }}" class="d-flex align-items-center justify-content-between search__content">
+      <input
+        class="form-search__form"
+        type="text"
+        placeholder="Search"
+        name="q"
+        value="{{ search.terms | escape }}">
+      <button
+        type="submit"
+        value="Search"
+        class="form-search__btn">{% render 'icon-search', class: 'd-flex' %}</button>
+
+    </form>
+    {% if iconClose %}
+      <span class="btnClose cursor-pointer d-flex">{% render 'icon-close' %}</span>
+    {% endif %}
+  </div>
+
+</div>

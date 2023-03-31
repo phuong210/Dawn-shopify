@@ -1,0 +1,30 @@
+{
+    "sections": {
+        "Image-banner" :{
+            "type": "Image-banner"
+        },
+        "Rich-text": {
+            "type": "Rich-text"
+        },
+        "Featured-collection": {
+            "type": "Featured-collection"
+        },
+        "Collage": {
+            "type": "Collage"
+        },
+        "Video": {
+            "type": "Video"
+        },
+        "Multicolumn": {
+            "type": "Multicolumn"
+        }
+    },
+    "order": [
+        "Image-banner",
+        "Rich-text",
+        "Featured-collection",
+        "Collage",
+        "Video",
+        "Multicolumn"
+    ]
+}

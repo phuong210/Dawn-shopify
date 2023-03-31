@@ -1,0 +1,51 @@
+<style>
+  .quantity-button {
+    border: 1px solid #d0d0d0;
+    width: 13.8rem;
+    padding: 1.2rem;
+  }
+  .button-minus,
+  .button-plus {
+    background: none;
+    border: unset;
+    padding: 0;
+  }
+  .quantity {
+    border: unset;
+    text-align: center;
+    padding: 0;
+  }
+</style>
+
+<div class="d-flex justify-content-between quantity-button">
+  <button class="button-minus cursor-pointer" type="button">{% render 'icon-minus' %}</button>
+  <input
+    type="number"
+    class="quantity product-button__quantity"
+    name="{{ name }}"
+    value="{{ value }}"
+    min="1"
+    max="100"
+    id="quantity">
+  <button class="button-plus cursor-pointer" type="button">{% render 'icon-plus' %}</button>
+</div>
+
+<script>
+  // button quantity
+// let quantity = document.querySelectorAll('.quantity-button');
+  let inputQuantity = document.getElementById("quantity");
+  let buttonPlus = document.querySelectorAll(".button-plus");
+  let buttonMinus = document.querySelectorAll(".button-minus");
+
+  buttonPlus.forEach((btnPlus) => {
+    btnPlus.addEventListener("click", function() {
+      inputQuantity.stepUp();
+    });
+  })
+
+  buttonMinus.forEach((btnMinus) => {
+    btnMinus.addEventListener("click", function() {
+      inputQuantity.stepDown();
+    });
+  })
+</script>

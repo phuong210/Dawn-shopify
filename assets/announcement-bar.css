@@ -1,0 +1,18 @@
+.announcement-bar {
+    box-shadow: inset 0px -1px 0px #e1e3e5;
+}
+.announcement__bar-text {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+}
+
+.announcement-bar {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+/* @media (min-width: 1024px) {
+    .announcement-bar {
+        /* display: none; 
+    }
+} */

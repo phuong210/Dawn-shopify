@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      rel="preload"
+      href="https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-1.0.0.min.js"
+      as="script">
+
+
+    {{ content_for_header }}
+
+    {% style %}:root
+    {
+      --color-main: {{ settings.color-text}}
+      ;
+      --color-text-inverse: {{ settings.text-inverse }}
+      ;
+      --color-accent-1: {{ settings.accent-1 }}
+      ;
+      --color-accent-2: {{ settings.accent-2 }}
+      ;
+      --color-background-1: {{ settings.background-1}}
+      ;
+      --color-background-2: {{ settings.background-2}}
+      ;
+      --color-background-3: {{ settings.background-3}}
+      ;
+
+    }
+  {% endstyle %}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'helper.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+
+  {% sections 'header-group' %}
+  {% render 'alert' %}
+  {{ content_for_layout }}
+
+  {% sections 'footer-group' %}
+
+  <script src="{{ 'main.js' | asset_url }}"></script>
+
+</body></html>

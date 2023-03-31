@@ -1,0 +1,189 @@
+{{ 'multicolumn.css' | asset_url | stylesheet_tag }}
+
+<section class="section multicolumn {{ section.settings.bg-color }}" style="--padding-top: {{section.settings.top_padding}}px; --padding-bottom: {{section.settings.bottom_padding}}px">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h2 mb-32">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="row section-margin-top multicolumn__wrap">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'item' %}
+          <div class="col" style="--w-lg: {{12 | divided_by: section.settings.columns}}">
+            <div class="multicolumn__wrap-item d-flex {{ block.settings.title_position }} justify-content-center flex-column">
+              {%- if block.settings.text == false -%}
+                {% if block.settings.icon == 'rectangle' %}
+                  <img src="{{ 'rectangle.png' | asset_img_url: 'medium' }}" alt="">
+                {% elsif block.settings.icon == 'rectangle2' %}
+                  <img src="{{ 'theCut.png' | asset_img_url: 'medium' }}" alt="">
+                {%- elsif block.settings.icon == 'icon-person' -%}
+                  {% render 'icon-person' %}
+                {% endif %}
+              {%- else -%}
+                <h4 class="subtext">{{ block.settings.title }}</h4>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <div class="h3 {{ block.settings.desc_position }}">{{ block.settings.description }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Multicolumn",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "select",
+        "id": "bg-color",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "accent-1",
+            "label": "Accent 1"
+          }, {
+            "value": "background-1",
+            "label": "Background 1"
+          }
+        ],
+        "default": "background-1"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Multicolumn",
+        "label": "Heading"
+      },
+      {
+        "type": "range",
+        "id": "columns",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 2,
+        "label": "Number of columns on desktop"
+      },
+      {
+        "type": "header",
+        "content": "SECTION PADDING"
+      }, {
+        "type": "range",
+        "id": "top_padding",
+        "min": 30,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 64
+      }, {
+        "type": "range",
+        "id": "bottom_padding",
+        "min": 30,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 64
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Column",
+        "type": "item",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "text",
+            "label": "Text",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "select",
+            "id": "title_position",
+            "label": "Title position",
+            "options": [
+              {
+                "value": "align-items-start",
+                "label": "Left"
+              }, {
+                "value": "align-items-center",
+                "label": "Center"
+              }, {
+                "value": "align-items-end",
+                "label": "Right"
+              }
+            ],
+            "default": "align-items-center"
+          },
+          {
+            "type": "select",
+            "id": "icon",
+            "options": [
+              {
+                "value": "rectangle",
+                "label": "Refinery29"
+              }, {
+                "value": "rectangle2",
+                "label": "The CUT"
+              }, {
+                "value": "icon-person",
+                "label": "Person"
+              }
+            ],
+            "label": "Icon",
+            "default": "rectangle"
+          }, {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description"
+          }, {
+            "type": "select",
+            "id": "desc_position",
+            "label": "Description position",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "Left"
+              }, {
+                "value": "text-center",
+                "label": "Center"
+              }, {
+                "value": "text-right",
+                "label": "Right"
+              }
+            ],
+            "default": "text-center"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Multicolumn",
+
+        "blocks": [
+          {
+            "type": "item"
+          }, {
+            "type": "item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

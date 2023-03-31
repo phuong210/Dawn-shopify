@@ -1,0 +1,286 @@
+.collection {
+    --gap: 0.95rem;
+    padding-bottom: 4.4rem;
+    padding-top: 4.4rem;
+}
+.collection-option__mobile {
+    grid-area: mobile;
+}
+.collection-option__filter {
+    grid-area: filter;
+}
+.collection-option__product {
+    grid-area: product;
+    justify-self: end;
+}
+
+@media (max-width: 567px) {
+    .collection {
+        position: relative;
+    }
+    .collection-option {
+        /* position: relative; */
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "mobile product"
+            "filter .";
+    }
+    .collection-option__filter {
+        position: absolute;
+        z-index: 12;
+        background: var(--white);
+        /* left: 0; */
+        /* left: 0%; */
+        /* right: -100%; */
+        right: 0;
+        top: -13.5rem;
+        width: 90%;
+        height: 100vh;
+        transition: all 0.35s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        /* transform: translateX(0); */
+    }
+    .collection__filter-left_heading {
+        display: none;
+    }
+    .collection-option__filter.activeFilter {
+        /* right: 0; */
+        opacity: 1;
+        visibility: visible;
+        /* transform: translateX(0%); */
+        /* left: 10%; */
+    }
+    .filter-group {
+        width: 100%;
+    }
+    .filter-group__title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .filter-mobile__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1.129rem 1.2rem;
+        box-shadow: inset 0px -1px 0px #e1e3e5;
+    }
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        padding: 7rem 3.55rem 2.4rem 3.2rem;
+    }
+    .filter-group__down,
+    .filter-group__up {
+        display: none;
+    }
+    .filter-form__detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .filter-group-display {
+        top: 6.3rem;
+        right: 0;
+        width: 100%;
+        height: 50vh;
+        padding-top: 2.35rem;
+        padding-inline: 3.4rem;
+    }
+    .collection__option-sort {
+        padding-left: 3.2rem;
+        padding-right: 3.4rem;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .filter-group__arrow-left {
+        padding-bottom: 3.35rem;
+    }
+    .filter-group__arrow-left span {
+        padding-left: 1.15rem;
+    }
+    .filter-group-display__list {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .collection-option__filter {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    .collection__option-sort {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+    }
+    .active-filters {
+        padding-bottom: 1.6rem;
+        text-align: center;
+    }
+}
+.sort-select:focus {
+    outline: none;
+}
+summary {
+    outline: none;
+    list-style: none;
+}
+.overlay {
+    position: fixed;
+    z-index: 11;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: 750ms;
+    /* display: none; */
+}
+.overlay.active {
+    display: block;
+}
+@media (min-width: 568px) {
+    .collection-option {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto;
+        grid-template-areas: "filter product";
+    }
+    .collection-option__mobile {
+        display: none;
+    }
+    .filter-group__title-icon {
+        display: none;
+    }
+    .filter-mobile__header {
+        display: none;
+    }
+    .collection-option__filter {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .collection-option__filter-left {
+        display: flex;
+        align-items: center;
+    }
+    .filter-form__detail {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter-group {
+        padding-right: 1.364rem;
+    }
+    .filter-group-display {
+        border: 1px solid #d0d0d0;
+    }
+    .filter-group-summary {
+        display: flex;
+        align-items: center;
+    }
+    .filter-group-display__header {
+        border-bottom: 1px solid var(--color-border-light);
+        padding: 1.6rem;
+    }
+    .filter-group__arrow {
+        display: none;
+    }
+    .filter-group__arrow-left {
+        display: none;
+    }
+    .filter-group-display__list {
+        padding: 1rem 1.8rem;
+    }
+    .collection__option-sort {
+        padding-right: 2.965rem;
+    }
+    .active-filters {
+        display: none;
+    }
+}
+.filter-group-display__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sort-select {
+    border: unset;
+    font-family: "Assistant", sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+.sort-select:focus {
+    border: unset;
+}
+.sort__option {
+    font-family: "Assistant", sans-serif;
+}
+.collection__option-left {
+    gap: 2.4rem;
+}
+.filter-form {
+    gap: 2.965rem;
+}
+
+.filter-group__down.active {
+    display: none;
+}
+.filter-group__up {
+    display: none;
+}
+.filter-group__up.active {
+    display: block;
+}
+.filter-group-display {
+    position: absolute;
+    z-index: 10;
+    /* border: 1px solid #d0d0d0; */
+    background: #ffffff;
+    min-width: 30rem;
+}
+
+.filter-group-display__list-item {
+    margin-top: 2.2rem;
+}
+.filter-group-display__list-item:first-child {
+    margin-top: 0;
+}
+.filter-input {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+.filter-group-display__price-range {
+    padding: 1.6rem 3rem;
+}
+.filter-group-display__price-range-from input,
+.filter-group-display__price-range-to input {
+    padding-top: 1.5rem;
+    padding-left: 1.6rem;
+    padding-bottom: 1.7rem;
+    border: 1px solid #7d7d7d;
+}
+.filter-group-display__price-range-from input::placeholder,
+.filter-group-display__price-range-to input::placeholder {
+    font-size: 1.6rem;
+    line-height: 0.9375;
+}
+
+@media (min-width: 1024px) {
+    .collection {
+        padding-bottom: 6.4rem;
+        padding-top: 6.4rem;
+    }
+}

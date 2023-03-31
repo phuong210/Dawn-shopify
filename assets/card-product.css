@@ -1,0 +1,23 @@
+.card-product__img-second {
+    display: none;
+    left: 0;
+    top: 0;
+}
+.card-product__img:hover .card-product__img-second {
+    display: block;
+}
+.card-product:hover .card-product__title {
+    text-decoration: underline;
+}
+.card-product__title {
+    color: var(--color-text);
+}
+.card-product__vendor {
+    color: var(--color-border-dark);
+}
+.card-product__price span {
+    color: var(--color-text);
+}
+.compare-price {
+    text-decoration: line-through;
+}

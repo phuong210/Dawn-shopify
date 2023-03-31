@@ -1,0 +1,41 @@
+<style>
+  .main-search {
+    padding-top: 4.4rem;
+    padding-bottom: 4rem;
+  }
+  .main-search__img {
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  @media(min-width: 1024px) {
+    .main-search {
+      padding-top: 6.4rem;
+      padding-bottom: 6.4rem;
+    }
+  }
+</style>
+
+<section class="main-search">
+  <div class="container">
+    <div class="main-search__content d-flex justify-content-center align-items-center flex-column">
+      <h3 class="h2 mb-16">Search results</h3>
+      {% render 'form-search', iconClose: false %}
+      <p class="h3 mt-16">{{ search.results_count }} results found for "{{ search.terms | capitalize }}"</p>
+    </div>
+    {% if search.results %}
+      <div class="row mt-64">
+        <div class="col" style="--w-lg: 3">
+          {% for item in search.results %}
+            {% render 'card-product', product: item, hover_image: true, available: true, vendor: false, price: true, button: false, img: 'main-search__img' %}
+            {% comment %} <img src="{{ item.featured_image | img_url: 'medium' }}" alt="">
+            <p class="h4">{{ item.title }}</p>
+            <span class="h3">{{ item.price | money_with_currency }}</span> {% endcomment %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+
+  </div>
+</section>

@@ -1,0 +1,98 @@
+{{ 'video.css' | asset_url | stylesheet_tag }}
+
+<section class="section video {{ section.settings.color-background }}">
+  {%- if section.settings.heading != blank -%}
+    <div class="container">
+      <h1 class="mb-32 h2">{{ section.settings.heading }}</h1>
+    </div>
+  {%- endif -%}
+
+  <div class="{% if section.settings.full_width == false %}container{% endif %}">
+    <div class="video__thumnail relative">
+      {%- if section.settings.thumnail != blank -%}
+        {{ section.settings.thumnail | image_url: width: master | image_tag: widths: '320, 450, 550', class: 'image-cover video__thumnail-img hg-100' }}
+        <iframe
+          class="hide video__media-link"
+          src="https://www.youtube.com/embed/{{section.settings.video_url.id}}?rel=0&amp;controls=1&amp;autoplay=0&amp;mute=0&amp;start=0"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen=""></iframe>
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'video__thumnail-svg hg-100 w-100' }}
+      {%- endif -%}
+      <span class="video__thumnail-btn absolute cursor-pointer">{% render 'icon-play' %}</span>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // video
+  const btnVideo = document.querySelector('.video__thumnail-btn');
+  const video = document.querySelector('.video__media-link');
+
+  btnVideo.addEventListener('click', () => {
+    video.classList.remove('hide');
+    btnVideo.classList.add('active');
+  })
+</script>
+
+{% schema %}
+  {
+    "name": "Video",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Video"
+      },
+      {
+        "type": "image_picker",
+        "id": "thumnail",
+        "label": "Cover image"
+      },
+      {
+        "id": "video_url",
+        "type": "video_url",
+        "label": "Video URL",
+        "accept": [
+          "youtube", "vimeo"
+        ],
+        "default": "https://www.youtube.com/watch?v=NKzd_YiW9AQ&list=RDPlPxg44tMwg&index=27",
+        "placeholder": "text"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Make section full width",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "color-background",
+        "options": [
+          {
+            "value": "accent-1",
+            "label": "Accent 1"
+          }, {
+            "value": "accent-2",
+            "label": "Accent 2"
+          }, {
+            "value": "background-1",
+            "label": "Background 1"
+          }
+        ],
+        "default": "background-1",
+        "label": "Color scheme"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Video"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,255 @@
+{{ 'image-banner.css' | asset_url | stylesheet_tag }}
+
+<section class="relative image-banner">
+  <div class="d-grid {% if section.settings.second_img == blank %}grid-img__banner{% endif %} {% if section.settings.img_mobile == true %}grid-img__mobile{% endif %} ">
+    <div class="image-banner__img img-first">
+      {%- if section.settings.first_img != blank -%}
+        {{ section.settings.first_img | image_url: width: 1200 | image_tag: class: 'hg-100 image-cover' }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'bg-gray w-100 hg-100 image-cover' }}
+      {%- endif -%}
+    </div>
+    {%- if section.settings.second_img != blank -%}
+      <div class="image-banner__img img-second">{{ section.settings.second_img | image_url: width: 1200 | image_tag: class: 'hg-100 image-cover' }}</div>
+
+    {%- endif -%}
+
+    <div class="image-banner__content absolute {% if section.settings.show_text_mobile == true %}image-text__mobile {% endif %} content--{{section.settings.content}}">
+
+      <div class="image-banner__content-wrap {{section.settings.text_position}} {% if section.settings.show_bg-desktop == true %} {{section.settings.color_bg}} {% else %} content-default-desktop {% endif %} {% if section.settings.show_text_mobile == true %} {{section.settings.color_bg}} {% else %} content-default-mobile {% endif %}">
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="{{block.settings.heading-size}} ">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+
+            {%- when 'text' -%}
+            {%- if block.settings.text != blank -%}
+              <h4 class="h3 mt-10 {{block.settings.text-style}}">{{ block.settings.text }}</h4>
+            {%- endif -%}
+
+            {%- when 'button' -%}
+            <div class="image-banner__button mt-10">
+              {%- if block.settings.button-first != blank -%}
+                <a href="{{block.settings.link-first}}" class="image__btn-first button text-center {% if block.settings.link-first == blank %}button-not-allowed{% endif %} {% if block.settings.btn-first-outline == false %}button-outline {% else %}button-inverse-outline{% endif %}">{{ block.settings.button-first }}</a>
+              {%- endif -%}
+
+              {%- if block.settings.button-second != blank -%}
+                <a href="{{block.settings.link-second}}" class="image__btn-second button text-center {% if block.settings.btn-second-outline == false %}button-outline {% else %}button-inverse-outline{% endif %} {% if block.settings.link-second == blank %}button-not-allowed{% endif %}">{{ block.settings.button-second }}</a>
+              {%- endif -%}
+            </div>
+
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "Image banner",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "first_img",
+        "label": "First image"
+      },
+      {
+        "type": "image_picker",
+        "id": "second_img",
+        "label": "Second image"
+      },
+
+      {
+        "type": "select",
+        "id": "content",
+        "options": [
+          {
+            "value": "top-left",
+            "label": "Top Left"
+          }, {
+            "value": "top-center",
+            "label": "Top Center"
+          }, {
+            "value": "top-right",
+            "label": "Top Right"
+          }, {
+            "value": "middle-center",
+            "label": "Middle Center"
+          }
+        ],
+        "label": "Desktop content position",
+        "default": "middle-center"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_bg-desktop",
+        "label": "Show container on desktop",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "text_position",
+        "options": [
+          {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ],
+        "label": "Desktop content alignment",
+        "default": "text-center"
+      }, {
+        "type": "select",
+        "id": "color_bg",
+        "options": [
+          {
+            "value": "accent-1",
+            "label": "Accent 1"
+          }, {
+            "value": "accent-2",
+            "label": "Accent 2"
+          }, {
+            "value": "background-1",
+            "label": "Background 1"
+          }, {
+            "value": "background-2",
+            "label": "Background 2"
+          }
+        ],
+        "default": "background-1",
+        "label": "Color scheme"
+      }, {
+        "type": "header",
+        "content": "Mobile layout"
+      }, {
+        "type": "checkbox",
+        "id": "img_mobile",
+        "label": "Stack images on mobile",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_text_mobile",
+        "default": false,
+        "label": "Show container on mobile"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Heading",
+        "type": "heading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Image Banner"
+          }, {
+            "type": "select",
+            "id": "heading-size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h2",
+                "label": "Small"
+              }, {
+                "value": "h1",
+                "label": "Medium"
+              }, {
+                "value": "h0",
+                "label": "Large"
+              }
+            ],
+            "default": "h0"
+          }
+        ]
+      }, {
+        "name": "Text",
+        "type": "text",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Description",
+            "default": "Atypical leather goods"
+          }, {
+            "type": "select",
+            "id": "text-style",
+            "label": "Text style",
+            "options": [
+              {
+                "value": "h3",
+                "label": "Body"
+              }, {
+                "value": "h2",
+                "label": "Subtitle"
+              }, {
+                "value": "text-uppercase",
+                "label": "Uppercase"
+              }
+            ],
+            "default": "text-uppercase"
+          }
+        ]
+      }, {
+        "name": "Button",
+        "type": "button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button-first",
+            "label": "Label",
+            "default": "Add to cart",
+            "info": "Leave the label blank to hide the button."
+          },
+          {
+            "type": "url",
+            "id": "link-first",
+            "label": "First button link"
+          },
+          {
+            "type": "checkbox",
+            "id": "btn-first-outline",
+            "label": "Use outline button style",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "button-second",
+            "label": "Label"
+          }, {
+            "type": "url",
+            "id": "link-second",
+            "label": "Second button link"
+          }, {
+            "type": "checkbox",
+            "id": "btn-second-outline",
+            "label": "Use outline button style",
+            "default": true
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image banner"
+
+      }
+    ]
+  }
+{% endschema %}

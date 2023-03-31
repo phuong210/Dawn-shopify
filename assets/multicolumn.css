@@ -1,0 +1,11 @@
+.multicolumn {
+    background: var(--color-background);
+    color: var(--color-text);
+}
+.multicolumn__wrap-item {
+    padding: 1.6rem;
+    gap: 1.6rem;
+}
+.multicolumn__wrap-item img {
+    width: 20rem;
+}

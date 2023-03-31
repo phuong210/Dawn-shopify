@@ -1,0 +1,213 @@
+{{ 'header.css' | asset_url | stylesheet_tag }}
+
+<header>
+  <div class="container">
+    <div class="header d-grid header--{{section.settings.logo_position}} header--{{section.settings.mobile_position}}">
+
+      <div class="menu-mobile d-flex align-items-center">
+
+        <span class="hamburger d-flex">{% render 'icon-union' %}</span>
+        <span class="button-close">{% render 'icon-close' %}</span>
+      </div>
+
+      <div class="header__search">
+        <div class="header__search-icon d-flex align-items-center hg-100">
+          <span class="d-flex align-items-center cursor-pointer" id="btn-search">{% render 'icon-search' %}</span>
+        </div>
+      </div>
+      {% render 'form-search', class: 'form-search', iconClose: true %}
+      <div class="overlayFormSearch"></div>
+
+      <div class="header__heading">
+        <a href="{{ routes.root_url }}" class="header__heading-link hg-100 d-flex align-items-center">
+          {%- if section.settings.logo != blank -%}
+            {{ section.settings.logo | image_url: width: 90 | image_tag }}
+          {% else %}
+            <h1 class="h1 header__heading-logo">{{ shop.name }}</h1>
+          {% endif %}
+        </a>
+      </div>
+
+      {%- if section.settings.menu != blank -%}
+        <div class="header__menu d-flex justify-content-between top-menuMobile" style="top: --topMenu">
+          <ul class="header__inline-menu relative d-flex align-items-center">
+            {% for link in section.settings.menu.links %}
+              <li class="hg-100 d-inline-block d-flex header__menu-link align-items-center">
+                <a href="{{ link.url }}" class="h4 menu__link-item">{{ link.title }}</a>
+                {% if link.links.size > 0 %}
+                  <span class="d-flex align-items-center justify-content-center pl-14 menu__link-icon">{% render 'icon-chevron-down' %}</span>
+                  <span class="btn__link-submenu d-none">{% render 'icon-arrow' %}</span>
+                  <ul class="header__menu-child list-unstyle absolute d-flex flex-column">
+                    <li class="close mb-32">
+                      <p class="sub-close d-flex">
+                        <span class="submenu-btn">
+                          {% render 'icon-arrow-left' %}
+                        </span>
+                        {{ link.title }}
+                      </p>
+                    </li>
+                    {% for child_link in link.links %}
+                      <li class="dropdown__child-link mb-35">
+                        <a href="{{ child_link.url }}" class="h5 menu__link-item-child">{{ child_link.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+          <div class="menu-drawer__links">
+
+            {%- if shop.customer_accounts_enabled -%}
+              <a href="{{ routes.account_login_url }}" class="menu-drawer__account d-flex align-items-center">
+                {% render 'icon-person' %}
+                <h4 class="h4 pl-9">Login</h4>
+              </a>
+            {%- endif -%}
+            <ul class="list-unstyle d-flex menu__social-list mt-43">
+              {%- if settings.social_twitter_link != blank and section.settings.show_social -%}
+                <li>
+                  <a
+                    href="{{settings.social_twitter_link | escape}}"
+                    aria-describedby="a11y-external-message"
+                    class="social-icons__link">{% render 'icon-twitter' %}</a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_facebook_link != blank and section.settings.show_social -%}
+                <li>
+                  <a
+                    class="social-icons__link"
+                    href="{{ settings.social_facebook_link | escape }}"
+                    aria-describedby="a11y-external-message">
+                    {%- render 'icon-facebook' -%}
+
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_instagram_link != blank and section.settings.show_social -%}
+                <li>
+                  <a
+                    class="social-icons__link"
+                    href="{{ settings.social_instagram_link | escape }}"
+                    aria-describedby="a11y-external-message">
+                    {%- render 'icon-instagram' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tiktok_link != blank and section.settings.show_social -%}
+                <li>
+                  <a
+                    class="social-icons__link"
+                    href="{{ settings.social_tiktok_link | escape }}"
+                    aria-describedby="a11y-external-message">
+                    {%- render 'icon-tiktok' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_youtube_link != blank and section.settings.show_social -%}
+                <li>
+                  <a
+                    class="social-icons__link"
+                    href="{{ settings.social_youtube_link | escape }}"
+                    aria-describedby="a11y-external-message">
+                    {%- render 'icon-youtube' -%}
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <ul class="header__icons d-flex align-items-center list-unstyle">
+        <li class="header__icons-person">
+          <a href="{{routes.account_login_url}}" class="d-flex">
+            {% render 'icon-person' %}
+          </a>
+        </li>
+        <li class="relative">
+          <a href="{{routes.cart_url}}" class="cartIcon d-flex">
+            {% render 'icon-cart-empty', class: 'cart-empty' %}
+            <span id="cart-item-count" class="cart__quantity absolute d-flex justify-content-center align-items-center">{{ cart.item_count }}</span>
+            <div class="header__icons-cart-filled d-none">
+              {% render 'icon-cart', class: 'cart-filled' %}
+              <span id="cart-item-count" class="cart__quantity absolute d-flex justify-content-center align-items-center">{{ cart.item_count }}</span>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</header>
+<script src="{{ 'header.js' | asset_url }}"></script>
+{% schema %}
+  {
+    "name": "Header",
+    "class": "section-header",
+    "disabled_on": {
+      "groups": ["footer"]
+    },
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "select",
+        "id": "logo_position",
+        "options": [
+          {
+            "value": "top-left",
+            "label": "Top Left"
+          }, {
+            "value": "middle-left",
+            "label": "Middle Left"
+          }, {
+            "value": "top-center",
+            "label": "Top Center"
+          }, {
+            "value": "middle-center",
+            "label": "Middle Center"
+          }
+        ],
+        "default": "middle-left",
+        "label": "Desktop logo position"
+      },
+
+      {
+        "type": "link_list",
+        "id": "menu",
+        "default": "main-menu",
+        "label": "menu"
+      }, {
+        "type": "header",
+        "content": "Mobile layout"
+      }, {
+        "type": "select",
+        "id": "mobile_position",
+        "options": [
+          {
+            "value": "logo-left",
+            "label": "Left"
+          }, {
+            "value": "logo-center",
+            "label": "Center"
+          }
+        ],
+        "default": "logo-left",
+        "label": "Mobile logo position"
+      }, {
+        "type": "checkbox",
+        "id": "show_social",
+        "default": true,
+        "label": "Show Social"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,98 @@
+.footer {
+    /* padding-top: 3.2rem; */
+    background: var(--color-background);
+    color: var(--color-text);
+}
+.footer a {
+    color: var(--color-text);
+}
+
+.footer__top {
+    border-top: 1px solid #d0d0d0;
+    padding-top: calc(var(--padding-top-footer) / 1.6);
+    /* padding-top: 4rem; */
+    padding-bottom: 4rem;
+}
+.footer__middle {
+    padding-bottom: 4.3rem;
+    border-bottom: 1px solid #d0d0d0;
+}
+.footer__block-list-item {
+    gap: 1.6rem;
+}
+.footer__form-field {
+    padding: 0.858rem 1.95rem 0.858rem 1.6rem;
+    border: 1px solid #7d7d7d;
+    min-width: 33.1rem;
+}
+.field__input,
+.footer__form-btn {
+    font-family: "Assistant", sans-serif;
+    border: unset;
+    background: unset;
+    outline: unset;
+    color: var(--color-text);
+}
+.footer__form-btn {
+    padding: 0;
+}
+.field__input:focus {
+    border: unset;
+    background: unset;
+    outline: unset;
+}
+.footer__bottom {
+    padding-top: 4.1rem;
+    padding-bottom: calc(var(--padding-bottom-footer) / 1.6);
+}
+.footer__bottom-wrap {
+    row-gap: 2.5rem;
+}
+.footer__bottom-location {
+    gap: 0.8rem;
+    justify-content: center;
+}
+.menu__payment-list {
+    gap: 0.5rem;
+}
+.form__location-option {
+    font-family: "Assistant", sans-serif;
+    font-weight: 400;
+    color: rgba(18, 18, 18, 0.75);
+    padding: 1.25rem 1.1rem;
+    border: 1px solid #7d7d7d;
+}
+.footer__middle-wrap {
+    row-gap: 2.9rem;
+}
+.footer__top-wrap {
+    /* gap: 4.1rem; */
+    row-gap: 4.1rem;
+}
+@media (min-width: 1024px) {
+    .menu__payment-list {
+        gap: 2.5rem;
+    }
+    .footer__top {
+        padding-top: var(--padding-top-footer);
+        padding-bottom: 6.4rem;
+    }
+    .footer__middle {
+        padding-bottom: 6.4rem;
+    }
+    .footer__middle-form {
+        align-items: start;
+    }
+    .footer-list {
+        justify-content: end;
+    }
+    .footer__bottom {
+        padding-top: 6.5rem;
+        padding-bottom: var(--padding-bottom-footer);
+        /* padding-bottom: 6.4rem; */
+    }
+    .footer__bottom-location {
+        gap: 2.4rem;
+        justify-content: flex-start;
+    }
+}

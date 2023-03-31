@@ -1,0 +1,77 @@
+{% comment %} product = block.settings.product, section.settings = section, hover_image, available {% endcomment %}
+{{ 'card-product.css' | asset_url | stylesheet_tag }}
+
+
+<div class="card-product d-flex flex-column relative">
+  {%- if product.featured_image != blank -%}
+    <a href="{{ product.url }}" class="card-product__img image-wrap relative w-100 hg-100 relative w-100 hg-100">
+      <img
+        src="{{ product.featured_image | image_url: width: '320, 450, 550' }}"
+        alt=""
+        class="{{section.img-ratio}} d-flex {{ img }}">
+
+      {%- if hover_image == true -%}
+        {%- if section.hover_image -%}
+          {% for image in product.images limit: 1 offset: 1 %}
+            <img src="{{ image | img_url: "medium" }}" class="{{ section.img-ratio }} d-flex card-product__img-second absolute ">
+          {% endfor %}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if available == true -%}
+        {%- if product.compare_at_price_min != 0 -%}
+          <span class="h5 button-small sale">Sale</span>
+        {%- endif -%}
+
+        {%- if product.available == false -%}
+          <span class="h5 button-small sold-out">Sold out</span>
+        {%- endif -%}
+      {%- endif -%}
+
+      <a href="{{product.url}}" class="h4 card-product__title {{ class }}">{{ product.title }}</a>
+      {%- if vendor == true -%}
+        {%- if section.vendor == true -%}
+          <p class="h5 text-uppercase card-product__vendor">{{ product.vendor }}</p>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if price == true -%}
+        <div class="card-product__price">
+          {%- if product.compare_at_price_min != 0 -%}
+            <span class="h4 mr-10 compare-price">{{ product.compare_at_price_min | money }}</span>
+          {%- endif -%}
+          <span class="h3">{{ product.price | money_with_currency }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if button == true -%}
+        {%- if section.button != blank -%}
+          <div class="mt-10">
+            <select class="product-select d-none" name="id">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}">
+                  {{ variant.title }}
+                </option>
+              {% endfor %}
+            </select>
+            <input
+              type="number"
+              class="quantity d-none"
+              name="quantity"
+              value="1"
+              min="1"
+              max="100">
+            {%- if product.variants.size > 1 -%}
+              <button type="button" class="button-choose button button-inverse w-100 cursor-pointer">Choose options</button>
+            {%- elsif product.available == false -%}
+              <button type="button" class="button w-100 button-inverse button-not-allowed button-sold-out">Sold out
+              </button>
+            {%- else -%}
+              <button type="button" class="add-to-cart-btn button button-inverse w-100 cursor-pointer">Add to cart</button>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </a>
+  {%- endif -%}
+</div>

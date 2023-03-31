@@ -1,0 +1,278 @@
+{{ 'main-collection.css' | asset_url | stylesheet_tag }}
+
+<section class="collection">
+  <div class="container">
+    <h1>{{ collection.title }}</h1>
+    <div class="collection-option d-grid mt-40">
+      <div class="collection-option__mobile d-flex align-items-center">
+        {% render 'icon-filter-sort' %}
+        <span>Filter and sort</span>
+      </div>
+      <div class="overlay"></div>
+      <div class="collection-option__filter">
+        <div class="collection-option__filter-left ">
+          <h4 class="pr-24 collection__filter-left_heading">Filter:</h4>
+          <div class="filter-mobile__header">
+            <p></p>
+            <div class="text-center"><h4>Filter and sort</h4>
+            <p class="h4 mt-4">{{ collection.all_products_count }} products</p></div>
+            {% render 'icon-close', class: 'filter-button' %}
+          </div>
+          <form class="filter-form d-flex">
+              {%- for filter in collection.filters -%}
+                <div class="filter-form__detail">
+                <details class="filter-group">
+                  <summary class="filter-group-summary cursor-pointer">
+                    <div class="filter-group__title">
+                      <span class="h4">{{ filter.label }}</span>
+                      {% render 'icon-arrow', class: 'filter-group__title-icon' %}
+                    </div>
+                  </summary>
+                  <div class="filter-group-display">
+                    <div class="filter-group__arrow-left">
+                      {% render 'icon-arrow-left'%}
+                      <span class="h4">{{ filter.label }}</span>  
+                    </div>
+                    <div class="filter-group-display__header">
+                      {%- if filter.type == 'list' -%}
+                        <span class="filter-group-display__header-selected h4">{{ filter.active_values.size }} selected</span>
+                        {%- elsif filter.type == 'price_range' -%}
+                          <p class="h4">The highest price is {{ filter.range_max | money_with_currency }}</p>
+                          <a href="{{ filter.url_to_remove }}" class="filter-group-display__header-reset h4 text-underline">Reset</a>
+                      {%- endif -%}
+                      {%- if filter.active_values.size > 0 -%}
+                        <a href="{{ filter.url_to_remove }}" class="filter-group-display__header-reset h4 text-underline">Reset</a>
+                      {%- endif -%}
+                    </div>
+
+                    {%- case filter.type -%}
+                      {%- when 'boolean' or 'list' -%}
+                        <ul class="filter-group-display__list list-unstyle">
+                          {%- for filter_value in filter.values -%}
+                            <li class="filter-group-display__list-item">
+                              <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                              <input type="checkbox" class="h4 filter-input"
+                                name="{{ filter_value.param_name }}"
+                                value="{{ filter_value.value }}"
+                                id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                {% if filter_value.active -%}checked{%- endif %}
+                                {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
+                              >{{ filter_value.label }}</label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                        <div class="filter-group-display__submit">
+                          <button type="submit" class="button black cursor-pointer">Apply</button>
+                        </div>
+
+                      {%- when 'price_range' -%}
+                        <div class="filter-group-display__price-range d-flex justify-content-between align-items-center">
+                          <div class="filter-group-display__price-range-from">
+                            <input name="{{ filter.min_value.param_name }}"
+                              id="Filter-{{ filter.min_value.param_name }}"
+                              {% if filter.min_value.value -%}
+                                value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="From"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                            >
+                          </div>
+                          <div class="filter-group-display__price-range-to">
+                            <input name="{{ filter.max_value.param_name }}"
+                              id="Filter-{{ filter.max_value.param_name }}"
+                              {% if filter.max_value.value -%}
+                                value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="To"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                            >
+                          </div>
+                        </div>
+
+                    {%- endcase -%}
+                  </div>
+                </details>
+                  {% render 'icon-chevron-down', class: 'hg-100 filter-group__down' %}
+                  {% render 'icon-chevron-up', class: 'hg-100 filter-group__up' %}
+                  
+                </div>
+              {%- endfor -%}
+              
+          </form>
+        </div>
+        <div class="collection__option-sort">
+            <label class="h4 pr-24">Sort by:</label>
+            <select id="sort-by" class="sort-select">
+                {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+                {% for option in collection.sort_options %}
+                    <option class="h4 sort__option" value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                        {{ option.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="active-filters">
+          <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="active-filters__clear text-underline">Clear all</a>
+
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == "price_range" -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a class="active-filters__remove-filter" href="{{ filter.url_to_remove }}">
+                  {%- assign min_value = filter.min_value.value | default: 0 -%}
+                  {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                  {{ min_value | money }} - {{ max_value | money }} X
+                </a>
+              {%- endif -%}
+            {%- else -%}
+              {%- for filter_value in filter.active_values -%}
+                <a class="active-filters__remove-filter" href="{{ filter_value.url_to_remove }}">
+                  {{ filter.label }}: {{ filter_value.label }} X
+                </a>
+              {%- endfor -%}
+            {%- endif- %}
+          {%- endfor -%}
+        </div>
+      </div>
+      <p class="h4 collection-option__product">{{ collection.all_products_count }} products</p>
+
+    </div>
+    <div class="row mt-40">
+      {% for product in collection.products %}
+        <div class="col" style="--w-xs: {{ section.settings.columns-mobile }}; --w-md: {{ 12 | divided_by: section.settings.columns_desktop }}">
+
+          {% render 'card-product', product: product, section: section.settings, hover_image: true, available: true, vendor: true, price: true, button: true %}
+
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  Shopify.queryParams = {};
+
+  // Preserve existing query parameters
+  if (location.search.length) {
+    var params = location.search.substr(1).split('&');
+
+    for (var i = 0; i < params.length; i++) {
+      var keyValue = params[i].split('=');
+
+      if (keyValue.length) {
+        Shopify.queryParams[decodeURIComponent(keyValue[0])] = decodeURIComponent(keyValue[1]);
+      }
+    }
+  }
+
+  // Update sort_by query parameter on select change
+  document.querySelector('#sort-by').addEventListener('change', function(e) {
+    var value = e.target.value;
+
+    Shopify.queryParams.sort_by = value;
+    location.search = new URLSearchParams(Shopify.queryParams).toString();
+  });
+
+  // detail open
+  const detailsElements = document.querySelectorAll(".filter-group");
+  const down = document.querySelector('.filter-group__down');
+  const up = document.querySelector('.filter-group__up');
+
+  detailsElements.forEach((item) => {
+    item.addEventListener('click', () => {
+        down.classList.toggle('active');
+        up.classList.toggle('active');
+    })
+  })
+
+  const filterMobile = document.querySelector('.collection-option__mobile');
+  const filter = document.querySelector('.collection-option__filter');
+  const overlay = document.querySelector('.overlay');
+  const btnCloseFilter = document.querySelector('.filter-button');
+  const body = document.querySelector('body');
+
+  filterMobile.addEventListener('click', () => {
+      filter.classList.toggle('activeFilter');
+      overlay.classList.toggle('active');
+      body.style.overflow = 'hidden';
+
+  })
+  btnCloseFilter.addEventListener('click', () => {
+    filter.classList.remove('activeFilter');
+    overlay.classList.remove('active');
+    body.removeAttribute('style');
+  })
+  overlay.addEventListener('click', () => {
+    filter.classList.remove('activeFilter');
+    overlay.classList.remove('active');
+    body.removeAttribute('style');
+  })
+  window.addEventListener('resize', () => {
+      if(window.innerWidth > 567) {
+        filter.classList.remove('activeFilter');
+        overlay.classList.remove('active');
+      }
+  })
+
+  const btnDetail = document.querySelectorAll('.filter-group__arrow-left');
+  btnDetail.forEach((button) => {
+    button.addEventListener('click', () => {
+      console.log(1);
+      for(let i = 0; i < detailsElements.length ; i++) {
+        detailsElements[i].removeAttribute("open");
+      }
+    })
+  })
+  
+</script>
+
+{% schema %}
+  {
+    "name": "Collection",
+    "settings": [
+      {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "select",
+        "id": "columns-mobile",
+        "label": "Number of columns on mobile",
+        "options": [
+          {
+            "value": "12",
+            "label": "1 column"
+          }, {
+            "value": "6",
+            "label": "2 columns"
+          }
+        ],
+        "default": "6"
+      }, {
+        "type": "header",
+        "content": "PRODUCT CARD"
+      }, {
+        "type": "select",
+        "id": "img-ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "hg-100",
+            "label": "Adapt to image"
+          }, {
+            "value": "img-square",
+            "label": "Square"
+          }
+        ],
+        "default": "hg-100"
+      }
+    ]
+  }
+{% endschema %}

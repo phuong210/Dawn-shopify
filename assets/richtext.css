@@ -1,0 +1,19 @@
+.rich-text {
+    background: var(--color-background);
+    color: var(--color-text);
+    /* padding-top: 4rem; */
+    /* padding-bottom: 4rem; */
+}
+.rich-text__wrap {
+    gap: 3.2rem;
+}
+.rich-text__desc {
+    max-width: 70.1rem;
+    margin: 0 auto;
+}
+/* @media (min-width: 1024px) {
+    .rich-text {
+        padding-top: 6.4rem;
+        padding-bottom: 6.4rem;
+    }
+} */

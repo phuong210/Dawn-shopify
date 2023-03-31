@@ -1,0 +1,317 @@
+{{ 'featured-collection.css' | asset_url | stylesheet_tag }}
+
+<section class="featured-collection section {{ section.settings.color-background }}" style="--padding-top: {{section.settings.top_padding}}px; --padding-bottom: {{section.settings.bottom_padding}}px">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="{{ section.settings.heading_size }} {{ section.settings.text_position }}">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.show-description == false -%}
+      {%- if section.settings.description != blank -%}
+        <div class="h3 featured-collection__desc {{ section.settings.text_position }} {{section.settings.size-desc}}">{{ section.settings.description }}</div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div id="Collection-{{ section.id }}" class="row featured-collection__wrap mt-40 {% if section.settings.carousel_desktop == true %} carousel-desktop{% endif %} {% if section.settings.carousel_mobile == true %} carousel-mobile{% endif %}">
+
+      {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+        <div class="col" style="--w-xs: {{ section.settings.columns-mobile }}; --w-md: {{ 12 | divided_by: section.settings.columns_desktop }}">
+
+          {% render 'card-product', product: product, section: section.settings, hover_image: true, available: true, vendor: true, price: true, button: true %}
+
+        </div>
+      {% endfor %}
+    </div>
+
+    {% render 'modal-product' %}
+
+    {%- if section.settings.button-view == true -%}
+      <div class="d-flex justify-content-center align-items-center mt-32">
+        <a href="{{ section.settings.collection.url }}" class="featured-collection__btn button {{section.settings.button-style}} ">View all</a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+<script>
+  // modal
+  let btnChoose = document.querySelectorAll('.button-choose');
+  let modal = document.getElementById('modal');
+  let close = document.querySelector('.modal__button-close');
+
+  btnChoose.forEach((choose) => {
+    choose.addEventListener('click', () => {
+      modal.classList.add('active-modal');
+    })
+  })
+
+  close.addEventListener('click', () => {
+    modal.classList.remove('active-modal');
+  })
+
+// update number 
+  const $ = document.querySelector.bind(document);
+  const $$ = document.querySelectorAll.bind(document);
+
+  const cartItemCount = document.getElementById("cart-item-count");
+
+
+  function updateCartItemCount() {
+    fetch("/cart.json").then((response) => response.json()).then((data) => {
+      const itemCount = data.item_count;
+      cartItemCount.textContent = itemCount;
+    }).catch((error) => {
+      console.error("Error fetching cart data:", error);
+    });
+  }
+
+  updateCartItemCount();
+
+  const featureItems = $$(".card-product");
+
+  featureItems.forEach(function(ele) {
+    const addToCartBtn = ele.querySelector(".add-to-cart-btn");
+    addToCartBtn.addEventListener("click", function() {
+      console.log(1);
+      const variantId = ele.querySelector(".product-select").value;
+      const quantity = ele.querySelector(".quantity").value;
+      const formData = new FormData();
+      formData.append("id", variantId);
+      formData.append("quantity", quantity);
+      fetch("/cart/add.js", {
+        method: "POST",
+        body: formData
+      }).then(function(response) {
+        showSuccessToast();
+        updateCartItemCount();
+        return response.json();
+      }).then(function(json) {
+        console.log(json);
+      }).catch(function(error) {
+        console.error(error);
+      });
+    });
+
+// 
+  });
+</script>
+{% schema %}
+  {
+    "name": "Featured collection",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Featured collection"
+      },
+      {
+        "type": "select",
+        "id": "text_position",
+        "label": "Text position",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          }, {
+            "value": "text-center",
+            "label": "Center"
+          }, {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ],
+        "default": "text-center"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "options": [
+          {
+            "value": "h1",
+            "label": "Large"
+          }, {
+            "value": "h2",
+            "label": "Medium"
+          }
+        ],
+        "label": "Heading size",
+        "default": "h1"
+      },
+      {
+        "type": "richtext",
+        "id": "description",
+        "label": "Description"
+      }, {
+        "type": "checkbox",
+        "id": "show-description",
+        "label": "Show collection description from the admin",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "size-desc",
+        "label": "Description style",
+        "options": [
+          {
+            "value": "text-uppercase",
+            "label": "Uppercase"
+          }, {
+            "value": "h3",
+            "label": "Body"
+          }, {
+            "value": "h4",
+            "label": "Subtitle"
+          }
+        ],
+        "default": "h3"
+      }, {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      }, {
+        "type": "range",
+        "id": "products_to_show",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "default": 4,
+        "label": "Maximum products to show"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 4,
+        "label": "Number of columns on desktop"
+      }, {
+        "type": "checkbox",
+        "id": "button-view",
+        "label": "Enable \"View all\" if collection has more products than shown",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "button-style",
+        "label": "\"View all\" style",
+        "options": [
+          {
+            "value": "button-link",
+            "label": "Link"
+          }, {
+            "value": "button-solid",
+            "label": "Solid button"
+          }, {
+            "value": "button-outline",
+            "label": "Outline button"
+          }
+        ],
+        "default": "button-solid"
+      }, {
+        "type": "checkbox",
+        "id": "carousel_desktop",
+        "label": "Enable carousel on desktop",
+        "default": false
+      }, {
+        "type": "select",
+        "id": "color-background",
+        "options": [
+          {
+            "value": "accent-1",
+            "label": "Accent 1"
+          }, {
+            "value": "accent-2",
+            "label": "Accent 2"
+          }, {
+            "value": "background-1",
+            "label": "Background 1"
+          }
+        ],
+        "default": "background-1",
+        "label": "Color scheme"
+      }, {
+        "type": "header",
+        "content": "PRODUCT CARD"
+      }, {
+        "type": "select",
+        "id": "img-ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "hg-100",
+            "label": "Adapt to image"
+          }, {
+            "value": "img-square",
+            "label": "Square"
+          }
+        ],
+        "default": "hg-100"
+      }, {
+        "type": "checkbox",
+        "label": "Show second image on hover",
+        "id": "hover_image",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "label": "Show vendor",
+        "id": "vendor",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "button",
+        "label": "Enable quick add button",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "MOBILE LAYOUT"
+      }, {
+        "type": "select",
+        "id": "columns-mobile",
+        "label": "Number of columns on mobile",
+        "options": [
+          {
+            "value": "12",
+            "label": "1 column"
+          }, {
+            "value": "6",
+            "label": "2 columns"
+          }
+        ],
+        "default": "6"
+      }, {
+        "type": "checkbox",
+        "label": "Enable swipe on mobile",
+        "id": "carousel_mobile",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "SECTION PADDING"
+      }, {
+        "type": "range",
+        "id": "top_padding",
+        "min": 30,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 64
+      }, {
+        "type": "range",
+        "id": "bottom_padding",
+        "min": 30,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 64
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured collection"
+      }
+    ]
+  }
+{% endschema %}

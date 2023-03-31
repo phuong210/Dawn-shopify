@@ -1,0 +1,188 @@
+{{ 'collage.css' | asset_url | stylesheet_tag }}
+
+<section class="collage section {{ section.settings.color_bg }}" style="--padding-top: {{section.settings.top_padding}}px; --padding-bottom: {{section.settings.bottom_padding}}px">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="collage__wrap d-grid {{section.settings.desktop-layout}} {{ section.settings.mobile_layout }} ">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'collection' -%}
+          <div class="collage__wrap-collection d-flex flex-column {% if block.settings.collection.title == blank %} button-not-allowed{% endif %}">
+            <div class="collage-collection__img image-wrap hg-100">
+              {%- if block.settings.collection.image != blank -%}
+                <a href="{{ block.settings.collection.url }}">{{ block.settings.collection.image | image_url: width: master | image_tag: widths: '320, 450, 550', class: 'hg-100 w-100 image-cover' }}</a>
+              {%- elsif block.settings.collection.image == blank -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'bg-gray hg-100 w-100' }}
+              {%- endif -%}
+            </div>
+            {% if block.settings.collection.title != blank %}
+              <div class="collage-title d-flex align-items-center">
+                <a class="h4" href="{{ block.settings.collection.url }}">{{ block.settings.collection.title }}</a>
+                {% render 'icon-arrow' %}
+              </div>
+            {% else %}
+              <span class="h4 collage-title">Title</span>
+            {% endif %}
+          </div>
+
+          {%- when 'product' -%}
+          {% render 'card-product', product: block.settings.product, section: block.settings.product, hover_image: true, available: true, price: false, button: false, class: 'collage-title' %}
+        {% comment %} {% render 'card-product', product: block.settings.product, class: 'class_name', price: true %} {% endcomment %}
+          {% comment %} <div class="collage__wrap-product d-flex flex-column {% if block.settings.product.title == blank %} button-not-allowed{% endif %}">
+
+
+          <div class="collage__product-img hg-100">
+          {%- if block.settings.product.featured_image != blank -%}
+          <a href="{{ product.url }}"><img
+          src="{{ block.settings.product.featured_image | img_url: '1024x' }}"
+          alt=""
+          class="hg-100 w-100 image-cover"></a>
+          {%- else -%}
+          {{ 'collection-2' | placeholder_svg_tag: 'bg-gray hg-100 w-100' }}
+          {%- endif -%}
+          </div>
+          {% if block.settings.product.title != blank %}
+          <div class="collage-title collage-title__product">
+          <a class="h4" href="{{ product.url }}">{{ block.settings.product.title }}</a>
+          <span class="h3 collage-title__price">{{ block.settings.product.price | money }}</span>
+          </div>
+          {% else %}
+          <span class="h4 collage-title">Title</span>
+          {% endif %}
+          </div> {% endcomment %}
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Collage",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Back in stock"
+      },
+      {
+        "type": "select",
+        "id": "desktop-layout",
+        "label": "Desktop layout",
+        "options": [
+          {
+            "value": "collage-left-block",
+            "label": "Left large block"
+          }, {
+            "value": "collage-right-block",
+            "label": "Right large block"
+          }
+        ],
+        "default": "collage-left-block"
+      },
+      {
+        "type": "select",
+        "id": "mobile_layout",
+        "label": "Mobile layout",
+        "options": [
+          {
+            "value": "collage-mobile",
+            "label": "Collage"
+          }, {
+            "value": "collage-column",
+            "label": "Column"
+          }
+        ],
+        "default": "collage-mobile"
+      },
+      {
+        "type": "select",
+        "id": "color_bg",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "accent-1",
+            "label": "Accent 1"
+          }, {
+            "value": "accent-2",
+            "label": "Accent 2"
+          }, {
+            "value": "background-1",
+            "label": "Background 1"
+          }, {
+            "value": "background-2",
+            "label": "Background 2"
+          }
+        ],
+        "default": "background-1"
+      }, {
+        "type": "header",
+        "content": "SECTION PADDING"
+      }, {
+        "type": "range",
+        "id": "top_padding",
+        "min": 0,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 64
+      }, {
+        "type": "range",
+        "id": "bottom_padding",
+        "min": 30,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 64
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Collection",
+        "type": "collection",
+        "limit": 2,
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection"
+          }
+        ]
+      }, {
+        "name": "Product",
+        "type": "product",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collage",
+        "blocks": [
+          {
+            "type": "collection"
+          }, {
+            "type": "collection"
+          }, {
+            "type": "product"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

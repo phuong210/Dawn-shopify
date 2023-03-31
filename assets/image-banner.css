@@ -1,0 +1,123 @@
+.img-first {
+    grid-area: img1;
+}
+.img-second {
+    grid-area: img2;
+}
+.image-banner__content {
+    grid-area: content;
+}
+.image-banner {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "img1 img2"
+        "content content";
+}
+.grid-img__banner {
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "img1"
+        "content";
+}
+
+.image-banner__content {
+    left: 50%;
+    transform: translate(-50%);
+    top: 8%;
+    width: 100%;
+}
+
+.image-banner__content-wrap {
+    padding: 4rem;
+    /* gap: 1rem; */
+}
+
+.image-banner__content-wrap {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+@media (max-width: 567px) {
+    .grid-img__mobile {
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "img1"
+            "content"
+            "img2";
+    }
+    .image-banner__img {
+        height: 106vw;
+    }
+    .image-text__mobile {
+        position: relative;
+    }
+    .image-text__mobile.image-banner__content {
+        top: 0;
+    }
+    .image-banner__content-wrap.content-default-mobile {
+        --color-text: var(--color-text-inverse);
+        /* --color-text: var(--color-main); */
+        --color-border: var(--color-text-inverse);
+        background: none;
+    }
+    .image-banner__content-wrap.accent-1 .button-outline {
+        --color-text: var(--color-main);
+    }
+    .image-banner__button a {
+        width: 100%;
+    }
+    .image__btn-second {
+        margin-top: 1rem;
+    }
+    .content-default-mobile .button-inverse-outline {
+        background: none;
+    }
+}
+.background-1 .button-inverse-outline {
+    background: var(--color-background-2);
+}
+
+@media (min-width: 568px) {
+    .background-1 .button-inverse-outline {
+        background: var(--color-background-2);
+    }
+    .image-banner__img {
+        height: 51.3vw;
+    }
+    .image-banner__content {
+        max-width: 46.4rem;
+        top: 25%;
+    }
+    .content--top-left {
+        top: 10%;
+        left: 10%;
+        transform: translate(-10%);
+    }
+    .content--top-center {
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%);
+    }
+    .content--top-right {
+        top: 10%;
+        right: 10%;
+        transform: translate(10%);
+    }
+    .image-banner__content-wrap.content-default-desktop {
+        color: var(--color-text-inverse);
+        --color-border: var(--color-text-inverse);
+        background: none;
+    }
+    .image-banner__button a {
+        min-width: 11.1rem;
+    }
+    .image__btn-second {
+        margin-left: 2rem;
+    }
+    .content-default-desktop .button-inverse-outline {
+        background: none;
+    }
+}
